@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Report Template</title>
+    <link rel="stylesheet"
+        href="C:\Users\acer\Documents\VS_code_Workspace\Automated_Reporting_Systems\templates\pdf.css">
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <img src="C:\Users\acer\Documents\VS_code_Workspace\Automated_Reporting_Systems\templates\images\header.png"
+                alt="Header Image Not Rendered">
+            <hr>
+        </header>
+
+        <div class="container">
+            <!-- Address Box -->
+            <div class="address-box">
+                <ul>
+                    {{ADDRESS}}
+                </ul>
+            </div>
+
+            <!-- Student Details -->
+            <div class="stud-details">
+                <div class="details-container">
+                    <div class="details">
+                        <span>Reg.No :</span>
+                        <p class="reg_no">{{REG_NO}}</p>
+                    </div>
+
+                    <div class="details">
+                        <span>Student Name :</span>
+                        <p class="std_name">{{STUDENT_NAME}}</p>
+                    </div>
+
+                    <div class="details">
+                        <span>Branch :</span>
+                        <p>{{BRANCH}}</p>
+                    </div>
+
+                    <div class="details">
+                        <span>Semester :</span>
+                        <p>{{SEMESTER}}</p>
+                    </div>
+                </div>
+                <!-- Student Image -->
+                <div class="student-img">
+                    <img src="C:\Users\acer\Documents\VS_code_Workspace\Automated_Reporting_Systems\templates\images\sample_image.png"
+                        alt="Student Image Not Rendered">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Placeholder for dynamically generated semester records -->
+        <div class="semester-records">
+            {{SEMESTER_RECORDS}}
+        </div>
+        
+        <p class="note">Note: Letter Grade Indicates A+-Outstanding, A-Excellent, B-Very Good, C-GOOD, D-Fair, S-Satisfactory, E-Satisfactory,
+        F-Fail, N-Not Satisfactory</p>
+
+        <div class="semester-summary">
+            {{SEMESTER_SUMMARY}}
+        </div>
+    </div>
+</body>
+
+</html>

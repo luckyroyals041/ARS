@@ -6,7 +6,8 @@ import {
 import { api } from '../services/api';
 import { tableColumns } from '../constants/columns';
 
-export default function StudentTable({ students, selected, handleSelect }) {
+export default function StudentTable({ students, selected, handleSelect, handlePreview }) {
+
     const handleIndividual = (regNo) => {
         const link = document.createElement('a');
         link.href = api.downloadIndividualReport(regNo);
@@ -45,10 +46,19 @@ export default function StudentTable({ students, selected, handleSelect }) {
                             >
                                 Generate Report
                             </Button>
+                            <Button
+                                variant="outlined" size="small" sx={{ ml: 1 }}
+                                onClick={() => handlePreview(s.registered_no)}
+                            >
+                                Preview
+                            </Button>
                         </TableCell>
+
                     </TableRow>
                 ))}
             </TableBody>
         </Table>
+        
+
     );
 }

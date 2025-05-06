@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify,send_file
+from flask import Flask, request, jsonify,send_file,abort
 from flask_cors import CORS
 from database.fetch_data import fetch_student_data
 from reports.generate_pdf import generate_pdf_report,generate_pdf_reporting
@@ -114,6 +114,16 @@ def download_pdf(reg_no):
         download_name=f"{reg_no}_report.pdf",
         mimetype="application/pdf"
     )
+    
+@app.route('/preview-pdf/<reg_no>')
+def preview_pdf(reg_no):
+    path = f'generated_reports/{reg_no}_report.pdf'
+    if not os.path.exists(path):
+        abort(404)
+    # Inline display, not attachment
+    return send_file(path, mimetype='application/pdf', as_attachment=False)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

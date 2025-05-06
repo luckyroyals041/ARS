@@ -10,10 +10,13 @@ export const api = {
         return axios.get(`${API_BASE_URL}/students${params ? `?${params}` : ''}`);
     },
 
+    previewIndividualReport: (regNo) =>
+        `${API_BASE_URL}/preview-pdf/${regNo}`,
+
 
     generatePdfReport: async ({ selected_students, generation_type }) => {
         const response = await axios.post(
-            `${API_BASE_URL}/generate-pdf-report`,
+             `${API_BASE_URL}/generate-pdf-report`,
             { selected_students, generation_type },
             { responseType: 'blob' }
         );

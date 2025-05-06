@@ -1,6 +1,7 @@
 import os
 import tempfile
 import zipfile
+import subprocess
 from PyPDF2 import PdfMerger
 from database.fetch_data import fetch_filtered_student_data,fetch_students_by_reg_nos
 from playwright.sync_api import sync_playwright
@@ -120,7 +121,25 @@ def generate_html(student, records):
     html_content = html_content.replace("{{SEMESTER_SUMMARY}}", semester_summary_html)
     return html_content
 
-
+def compress_with_ghostscript(input_path, output_path):
+    """Compress a PDF file using Ghostscript."""
+    command = [
+        "gswin64c",  # or "gs" depending on your environment
+        "-sDEVICE=pdfwrite",
+        "-dCompatibilityLevel=1.4",
+        "-dPDFSETTINGS=/ebook",  # Balanced quality and size
+        "-dNOPAUSE",
+        "-dQUIET",
+        "-dBATCH",
+        f"-sOutputFile={output_path}",
+        input_path,
+    ]
+    try:
+        subprocess.run(command, check=True)
+        print(f"✅ Compressed PDF saved to: {output_path}")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Ghostscript compression failed: {e}")
+        
 def generate_pdf_report(selected_student):
     """Generates PDF reports for selected students and returns path to a PDF file."""
     # selected_student is already a list
@@ -148,8 +167,12 @@ def generate_pdf_report(selected_student):
         page.pdf(path=pdf_output_path)
         browser.close()
 
-    os.remove(temp_html_path)
-    return pdf_output_path
+    compressed_pdf_path = os.path.join(temp_dir, f"compressed_{reg_no}.pdf")
+    compress_with_ghostscript(pdf_output_path, compressed_pdf_path)
+
+    # Remove the original PDF and return the compressed one
+    os.remove(pdf_output_path)
+    return compressed_pdf_path
 
 
 
@@ -199,7 +222,15 @@ def generate_pdf_reporting(selected_students, generation_type):
                     browser.close()
 
                 os.remove(temp_html_path)
-                zipf.write(pdf_output_path, os.path.basename(pdf_output_path))
+
+                # Compress the generated PDF
+                compressed_pdf_path = os.path.join(temp_dir, f"compressed_{reg_no}.pdf")
+                compress_with_ghostscript(pdf_output_path, compressed_pdf_path)
+
+                # Add the compressed PDF to the ZIP file
+                zipf.write(compressed_pdf_path, os.path.basename(compressed_pdf_path))
+                os.remove(compressed_pdf_path)
+
                 os.remove(pdf_output_path)
 
         print(f"✅ ZIP created: {zip_path}")
@@ -241,8 +272,14 @@ def generate_pdf_reporting(selected_students, generation_type):
             except:
                 pass
 
-        print(f"✅ Combined PDF created: {combined_path}")
-        return combined_path
+        # Compress the combined PDF
+        compressed_combined_pdf_path = os.path.join(temp_dir, "compressed_Combined_Student_Report.pdf")
+        compress_with_ghostscript(combined_path, compressed_combined_pdf_path)
+
+        os.remove(combined_path)
+
+        print(f"✅ Combined compressed PDF created: {compressed_combined_pdf_path}")
+        return compressed_combined_pdf_path
 
     else:
         print("❌ Invalid generation_type. Use 'individual' or 'combined'.")

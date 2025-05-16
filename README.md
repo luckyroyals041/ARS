@@ -1,145 +1,133 @@
-# 📊 Automated Reporting System  
+# Automated Reporting System (ARS)
 
-## **🔹 Project Overview**  
-The Automated Reporting System is designed to fetch student data from MySQL and generate reports in **PDF, Excel, and Dashboards**.
+A comprehensive system for managing student records, achievements, certifications, and generating reports with role-based access control.
 
----
+## Features
 
-## **🚀 Features**  
-✔ Fetches student records from MySQL  
-✔ Generates **PDF reports** for each student  
-✔ Creates **Excel reports** for batch processing  
-✔ Provides an **interactive dashboard** for analytics  
+- Role-based dashboards (Faculty, HoD, Principal, Admin)
+- Student management
+- Achievement and certification tracking
+- Academic performance monitoring
+- Attendance tracking
+- Counseling notes
+- Report generation
 
----
+## Tech Stack
 
-## **🛠 Prerequisites**  
-1️⃣ **Install Python** (if not already installed)  
-   - Download from [python.org](https://www.python.org/downloads/)  
-   - Verify installation:
-     ```sh
-     python --version
-     ```
+- **Frontend**: React, Material-UI, Chart.js, Framer Motion
+- **Backend**: Node.js, Express
+- **Database**: MySQL
 
-2️⃣ **Install MySQL Server**  
-   - Download from [mysql.com](https://dev.mysql.com/downloads/mysql/)  
-   - Create a database **manually** or let the script create it.  
+## Setup Instructions
 
----
+### Prerequisites
 
-## **📂 Project Setup**  
-### **1️⃣ Clone the Repository**# 📊 Automated Reporting System  
+- Node.js (v14+)
+- MySQL (v8+)
+- npm or yarn
 
-## **🛠 Project Overview**  
-The Automated Reporting System is designed to fetch student data from MySQL and generate reports in **PDF, Excel, and Dashboards**.
+### Database Setup
 
----
+1. Make the setup script executable:
 
-## **🚀 Features**  
-✔ Fetches student records from MySQL  
-✔ Generates **PDF reports** for each student  
-✔ Creates **Excel reports** for batch processing  
-✔ Provides an **interactive dashboard** for analytics  
-
----
-
-## **🛠 Prerequisites**  
-### **1. Install Python (if not already installed)**  
-- Download from [python.org](https://www.python.org/downloads/)  
-- Verify installation:
-  ```sh
-  python --version
-  ```
-
-### **2. Install MySQL Server**  
-- Download from [mysql.com](https://dev.mysql.com/downloads/mysql/)  
-- Create a database **manually** or let the script create it.  
-
----
-
-## **📂 Project Setup**  
-### **1. Clone the Repository**  
-```sh
-git clone https://github.com/your-username/Automated_Reporting_System.git
-cd Automated_Reporting_System
+```bash
+chmod +x setup_database.sh
 ```
 
-### **2. Create a Virtual Environment (Recommended)**  
-```sh
-python -m venv venv
+2. Run the database setup script:
+
+```bash
+./setup_database.sh
 ```
 
-### **3. Activate Virtual Environment**  
-- **Windows:**  
-  ```sh
-  venv\Scripts\Activate.ps1
-  ```
-- **Mac/Linux:**  
-  ```sh
-  source venv/bin/activate
-  ```
+3. Follow the prompts to enter your MySQL username and password.
 
-### **4. Install Required Dependencies**  
-```sh
-pip install -r requirements.txt
+### Backend Setup
+
+1. Navigate to the backend directory:
+
+```bash
+cd backend
 ```
 
-### **5. Configure Database**  
-- Open **`database/db_config.py`** and update the MySQL credentials:  
-  ```python
-  DB_CONFIG = {
-      "host": "localhost",
-      "user": "root",
-      "password": "yourpassword",
-      "database": "StudentReportingDB"
-  }
-  ```
+2. Install dependencies:
 
-- Create the database and tables (only needed for first-time setup):  
-  ```sh
-  python -m database.setup_db
-  ```
-
-- Insert sample data for testing (optional):  
-  ```sh
-  python -m utils.insert_sample_data
-  ```
-
----
-
-## **🎯 Running the Project**  
-To **generate reports** and **start the dashboard**, run:  
-```sh
-python main.py
+```bash
+npm install
 ```
 
----
+3. Start the backend server:
 
-## **📊 Running Individual Components**  
-| Task | Command |
-|------|---------|
-| Generate PDF Reports | `python -m reports.generate_pdf` |
-| Generate Excel Reports | `python -m reports.generate_excel` |
-| Start Dashboard | `python -m reports.generate_dashboard` |
-
-The dashboard will be available at: **[http://127.0.0.1:8050](http://127.0.0.1:8050)**  
-
----
-
-## **🛠 Troubleshooting**  
-**1. `ModuleNotFoundError` for `database` or `utils`?**  
-➡ Run the script using `-m`, e.g.:  
-```sh
-python -m utils.insert_sample_data
+```bash
+npm start
 ```
 
-**2. MySQL connection error?**  
-➡ Make sure MySQL is **running** and **credentials** in `db_config.py` are correct.
+### Frontend Setup
 
----
+1. Navigate to the frontend directory:
 
-## **🔧 Contributors**  
-👨‍💻 **KRISHNA BHAGAVAN** – Developer  
-👨‍💻 **NAREEN** – Contributor   
+```bash
+cd frontend
+```
 
----
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the frontend development server:
+
+```bash
+npm run dev
+```
+
+## Usage
+
+### Login Credentials
+
+- **Faculty**: username: `faculty`, password: `faculty123`
+- **HoD**: username: `hod`, password: `hod123`
+- **Principal**: username: `principal`, password: `principal123`
+- **Admin**: username: `admin`, password: `admin123`
+
+## Database Schema
+
+The system uses the following database tables:
+
+- **faculty**: Stores faculty information and credentials
+- **students**: Stores student information with registration_number as unique identifier
+- **courses**: Stores course information
+- **faculty_student_mapping**: Maps faculty to their assigned students
+- **student_summary**: Stores summary of student academic performance
+- **grades**: Stores student grades for each course
+- **student_semester_results**: Stores semester-wise results
+- **achievements**: Stores student achievements
+- **certifications**: Stores student certifications
+- **attendance**: Stores student attendance records
+- **counseling_notes**: Stores faculty counseling notes for students
+
+## Connecting to Real Database
+
+The system is designed to work with a MySQL database. The `setup_database.sh` script creates the necessary tables and populates them with sample data.
+
+If you already have an existing database with student data:
+1. Update the `db_setup.sql` file to match your existing schema
+2. Make sure the column names match what the application expects (e.g., `registration_number` instead of `registration_no`)
+3. Run the setup script to create any missing tables
+
+## Troubleshooting
+
+If you encounter authentication issues:
+1. Make sure the backend server is running
+2. Check that you're using the correct credentials
+3. Verify that the JWT secret keys in the `.env` file match what the application expects
+
+If you see database connection errors:
+1. Verify your MySQL credentials in the `.env` file
+2. Make sure MySQL is running
+3. Check that the database name is correct
+
+## License
+
+This project is licensed under the MIT License.

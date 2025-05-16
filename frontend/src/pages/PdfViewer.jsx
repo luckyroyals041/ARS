@@ -1,51 +1,53 @@
-import React, { useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
-// Required styles for text and annotation layers
-import "react-pdf/dist/Page/TextLayer.css";
-import "react-pdf/dist/Page/AnnotationLayer.css";
+import React, { useState } from 'react';
+import { Box, Button, Typography, CircularProgress, Paper } from '@mui/material';
+import { motion } from 'framer-motion';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 
-// Point pdfjs to the worker on UNPKG (version is auto-matched)
-pdfjs.GlobalWorkerOptions.workerSrc =
-    `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
+// Simple PDF viewer component that uses an iframe
 export default function PdfViewer({ src }) {
-    const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-    function onDocumentLoadSuccess({ numPages }) {
-        setNumPages(numPages);
-    }
+  const handleIframeLoad = () => {
+    setLoading(false);
+  };
 
-    return (
-        <div style={{ width: "100%" }}>
-            <div style={{ marginBottom: 8 }}>
-                <button
-                    onClick={() => setPageNumber(page => Math.max(page - 1, 1))}
-                    disabled={pageNumber <= 1}
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={() =>
-                        setPageNumber(page => Math.min(page + 1, numPages || page))
-                    }
-                    disabled={pageNumber >= (numPages || 1)}
-                    style={{ marginLeft: 8 }}
-                >
-                    Next
-                </button>
-                <span style={{ marginLeft: 16 }}>
-                    Page {pageNumber} of {numPages || "--"}
-                </span>
-            </div>
-
-            <Document
-                file={src}
-                onLoadSuccess={onDocumentLoadSuccess}
-                loading="Loading PDF..."
-            >
-                <Page pageNumber={pageNumber} width={800 /* adjust as needed */} />
-            </Document>
-        </div>
-    );
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+          <CircularProgress />
+        </Box>
+      )}
+      
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: loading ? 0 : 1 }}
+        transition={{ duration: 0.5 }}
+        style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      >
+        <Box 
+          sx={{ 
+            border: '1px solid #e0e0e0', 
+            borderRadius: 2,
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+            overflow: 'hidden',
+            width: '100%',
+            height: '70vh'
+          }}
+        >
+          <iframe 
+            src={src} 
+            width="100%" 
+            height="100%" 
+            style={{ border: 'none' }}
+            onLoad={handleIframeLoad}
+            title="PDF Preview"
+          />
+        </Box>
+      </motion.div>
+    </Box>
+  );
 }

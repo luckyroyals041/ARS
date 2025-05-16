@@ -1,76 +1,61 @@
-import axios from 'axios';
+// API service for making requests to the backend
+const getApiBaseUrl = () => {
+  // Get the hostname from the current URL
+  const hostname = window.location.hostname;
+  return `http://${hostname}:5000/api`;
+};
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = getApiBaseUrl();
 
 export const api = {
-
+  // Student data
+  fetchStudents: (branch = '', semester = '') => {
+    const params = new URLSearchParams();
+    if (branch) params.append('branch', branch);
+    if (semester) params.append('semester', semester);
     
-    fetchStudents: (filters = {}) => {
-        const params = new URLSearchParams(filters).toString();
-        return axios.get(`${API_BASE_URL}/students${params ? `?${params}` : ''}`);
-    },
-
-    previewIndividualReport: (regNo) =>
-        `${API_BASE_URL}/preview-pdf/${regNo}`,
-
-
-    generatePdfReport: async ({ selected_students, generation_type }) => {
-        const response = await axios.post(
-             `${API_BASE_URL}/generate-pdf-report`,
-            { selected_students, generation_type },
-            { responseType: 'blob' }
-        );
-
-        if (response.status !== 200) {
-            let errMsg = 'Failed to download report';
-            try {
-                // Attempt to parse JSON error
-                const text = await new Response(response.data).text();
-                const json = JSON.parse(text);
-                errMsg = json.error || errMsg;
-            } catch (_) { }
-            throw new Error(errMsg);
-        }
-
-        const disposition = response.headers['content-disposition'] || '';
-        const match = disposition.match(/filename="?(.+)"?/);
-        const filename = match
-            ? match[1]
-            : generation_type === 'combined'
-                ? 'Combined_Student_Report.pdf'
-                : 'Student_Reports.zip';
-
-        // Trigger browser download
-        const blob = new Blob([response.data]);
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-
-        return true;
-    },
-
-    // Generate and download Excel report
-    generateExcelReport: async ({ selected_students, selected_columns }) => {
-        const response = await axios.post(
-            `${API_BASE_URL}/generate-excel-report`,
-            { selected_students, selected_columns },
-            { responseType: 'blob' }
-        );
-
-        // Create a download link and trigger it
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'Student_Report.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-    },
-    downloadIndividualReport: (regNo) =>
-        `${API_BASE_URL}/download-pdf/${regNo}`
+    return fetch(`${API_BASE_URL}/students?${params.toString()}`)
+      .then(response => response.json());
+  },
+  
+  // PDF Reports
+  downloadIndividualReport: (regNo, includeCharts = false, templateStyle = 'classic') => {
+    const params = new URLSearchParams();
+    params.append('includeCharts', includeCharts);
+    params.append('templateStyle', templateStyle);
+    
+    return `${API_BASE_URL}/reports/individual/${regNo}?${params.toString()}`;
+  },
+  
+  previewIndividualReport: (regNo, includeCharts = false, templateStyle = 'classic') => {
+    const params = new URLSearchParams();
+    params.append('includeCharts', includeCharts);
+    params.append('templateStyle', templateStyle);
+    
+    return `${API_BASE_URL}/reports/preview/${regNo}?${params.toString()}`;
+  },
+  
+  downloadBulkReport: ({ selected, reportType, pdfType = 'individual', includeCharts = false, templateStyle = 'classic', selected_columns = [] }) => {
+    const params = new URLSearchParams();
+    params.append('students', selected.join(','));
+    
+    if (reportType === 'pdf') {
+      params.append('includeCharts', includeCharts);
+      params.append('templateStyle', templateStyle);
+      return `${API_BASE_URL}/reports/pdf/${pdfType}?${params.toString()}`;
+    } else if (reportType === 'excel') {
+      if (selected_columns.length > 0) {
+        params.append('columns', selected_columns.join(','));
+      }
+      return `${API_BASE_URL}/reports/excel?${params.toString()}`;
+    }
+    
+    return '';
+  },
+  
+  // Dashboard data
+  getDashboardStats: () => {
+    return fetch(`${API_BASE_URL}/dashboard/stats`)
+      .then(response => response.json());
+  }
 };

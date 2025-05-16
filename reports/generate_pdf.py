@@ -4,12 +4,22 @@ import zipfile
 import subprocess
 from PyPDF2 import PdfMerger
 from database.fetch_data import fetch_filtered_student_data,fetch_students_by_reg_nos
+from reports.generate_dashboard import generate_histogram
 from playwright.sync_api import sync_playwright
 
-def generate_html(student, records):
+def generate_html(student, records, summaries=None, includeCharts=False, template_style="classic"):
     """Reads the HTML template and replaces placeholders with student data and semester records."""
 
-    template_path = os.path.join("templates", "pdf.html")
+    # Select template based on style
+    template_styles = {
+        "classic": "pdf_classic.html",
+        "modern": "pdf_modern.html",
+        "minimal": "pdf_minimal.html"
+    }
+    
+    template_file = template_styles.get(template_style, "pdf_classic.html")
+    template_path = os.path.join("templates", template_file)
+    
     with open(template_path, "r", encoding="utf-8") as file:
         html_content = file.read()
 
@@ -110,6 +120,24 @@ def generate_html(student, records):
         </tbody>
     </table>
     """ if semester_summary_rows else ""
+    
+    # Generate SGPA data for chart
+    sgpa_list = []
+    
+    # Calculate SGPA from semester records
+    for sem_no, courses in sorted(semester_groups.items()):
+        total_subjects = len(courses)
+        if total_subjects > 0:
+            sem_sgpa = round(sum(course["grade_points"] for course in courses) / total_subjects, 2)
+            sgpa_list.append(sem_sgpa)
+    
+    print("SGPA List for chart:", sgpa_list)
+    print("Current semester:", student["curr_semester"])
+    
+    # Only generate chart if we have SGPA data and charts are requested
+    dashboard_html = ""
+    if sgpa_list and includeCharts:
+        dashboard_html = generate_histogram(student["name"], sgpa_list, student["curr_semester"])
 
     # Replace placeholders with actual data
     html_content = html_content.replace("{{REG_NO}}", student["registered_no"])
@@ -119,12 +147,18 @@ def generate_html(student, records):
     html_content = html_content.replace("{{ADDRESS}}", formatted_address)
     html_content = html_content.replace("{{SEMESTER_RECORDS}}", semester_html)
     html_content = html_content.replace("{{SEMESTER_SUMMARY}}", semester_summary_html)
+    html_content = html_content.replace("{{Dashboards}}", dashboard_html)
+    
+    # Fix image paths for PDF generation
+    # Convert absolute paths to relative paths that will work with Playwright
+    base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    html_content = html_content.replace("/home/lucky/ARS/baggi/v3/templates/images/", f"{base_dir}/templates/images/")
     return html_content
 
 def compress_with_ghostscript(input_path, output_path):
     """Compress a PDF file using Ghostscript."""
     command = [
-        "gswin64c",  # or "gs" depending on your environment
+        "gs",  # Linux Ghostscript command
         "-sDEVICE=pdfwrite",
         "-dCompatibilityLevel=1.4",
         "-dPDFSETTINGS=/ebook",  # Balanced quality and size
@@ -140,10 +174,10 @@ def compress_with_ghostscript(input_path, output_path):
     except subprocess.CalledProcessError as e:
         print(f"❌ Ghostscript compression failed: {e}")
         
-def generate_pdf_report(selected_student):
+def generate_pdf_report(selected_student, includeCharts=False, template_style="classic"):
     """Generates PDF reports for selected students and returns path to a PDF file."""
     # selected_student is already a list
-    students, records = fetch_students_by_reg_nos(selected_student)
+    students, records, summaries = fetch_students_by_reg_nos(selected_student)
 
     if not students:
         return None
@@ -152,7 +186,7 @@ def generate_pdf_report(selected_student):
     reg_no = student["registered_no"]
     
     temp_dir = tempfile.gettempdir()
-    html_content = generate_html(student, records)
+    html_content = generate_html(student, records, summaries, includeCharts, template_style)
 
     temp_html_path = os.path.join(temp_dir, f"temp_{reg_no}.html")
     pdf_output_path = os.path.join(temp_dir, f"{reg_no}.pdf")
@@ -176,13 +210,15 @@ def generate_pdf_report(selected_student):
 
 
 
-def generate_pdf_reporting(selected_students, generation_type):
+def generate_pdf_reporting(selected_students, generation_type, includeCharts=False, template_style="classic"):
     """
     Generates PDF reports for selected students.
     
     Parameters:
         selected_students (list): List of student registration numbers.
         generation_type (str): 'individual' for ZIP of PDFs, 'combined' for a single merged PDF.
+        includeCharts (bool): Whether to include SGPA charts in the PDFs.
+        template_style (str): Style of the PDF template ('classic', 'modern', or 'minimal').
     
     Returns:
         str: Path to the generated ZIP or combined PDF file.
@@ -203,7 +239,7 @@ def generate_pdf_reporting(selected_students, generation_type):
         zip_path = os.path.join(temp_dir, "Student_Reports.zip")
         with zipfile.ZipFile(zip_path, 'w') as zipf:
             for student in students:
-                html_content = generate_html(student, records)
+                html_content = generate_html(student, records, None, includeCharts, template_style)
 
                 reg_no = student["registered_no"]
                 temp_html_path = os.path.join(temp_dir, f"temp_{reg_no}.html")
@@ -239,7 +275,7 @@ def generate_pdf_reporting(selected_students, generation_type):
     elif generation_type == 'combined':
         individual_pdfs = []
         for student in students:
-            html_content = generate_html(student, records)
+            html_content = generate_html(student, records, None, includeCharts, template_style)
             reg_no = student["registered_no"]
             temp_html_file = os.path.join(temp_dir, f"temp_{reg_no}.html")
             temp_pdf_file = os.path.join(temp_dir, f"{reg_no}.pdf")
@@ -287,6 +323,6 @@ def generate_pdf_reporting(selected_students, generation_type):
 
 if __name__ == "__main__":
     # Example Usage:
-    selected_students = ["23A95A6102","23a95a6104"]  # Example: ["23A95A6102", "CHINTHA SITAMAHALAKSHMI"]
-    paths = generate_pdf_reporting(selected_students, "individual")
-    print(paths)
+    selected_students = ["23A95A6102"]
+    path = generate_pdf_report(selected_students, includeCharts=True, template_style="modern")
+    print(f"PDF generated at: {path}")

@@ -1,0 +1,62 @@
+name,code,credits,semester,department
+Communicative English,201HS1T01,3,1,Artificial Intelligence & Machine Learning
+Differential Equations and Linear Algebra,201BS1T01,3,1,Artificial Intelligence & Machine Learning
+Engineering Chemistry,201BS1T04,3,1,Artificial Intelligence & Machine Learning
+Programming for Problem Solving using C,201ES1T02,3,1,Artificial Intelligence & Machine Learning
+Computer Engineering Workshop,201ES1I02,3,1,Artificial Intelligence & Machine Learning
+Communicative English Lab,201HS1L01,1.5,1,Artificial Intelligence & Machine Learning
+Engineering Chemistry Lab,201BS1L03,1.5,1,Artificial Intelligence & Machine Learning
+Programming for Problem Solving using C Lab,201ES1L02,1.5,1,Artificial Intelligence & Machine Learning
+Environmental Science,201MC1T01,0,1,Artificial Intelligence & Machine Learning
+Numerical Methods and Complex Variables,201BS2T07,3,2,Artificial Intelligence & Machine Learning
+Applied Physics,201BS2T09,3,2,Artificial Intelligence & Machine Learning
+Digital Logic Design,201ES2T15,3,2,Artificial Intelligence & Machine Learning
+Python Programming,201ES2T04,3,2,Artificial Intelligence & Machine Learning
+Data Structures through C,201ES2T07,3,2,Artificial Intelligence & Machine Learning
+Applied Physics Lab,201BS2L04,1.5,2,Artificial Intelligence & Machine Learning
+Data Structures through C Lab,201ES2L06,1.5,2,Artificial Intelligence & Machine Learning
+Python Programming Lab,201ES2L14,1.5,2,Artificial Intelligence & Machine Learning
+Professional Communication Skills Lab,201HS2L01,0,2,Artificial Intelligence & Machine Learning
+Constitution of India,201MC2T02,0,2,Artificial Intelligence & Machine Learning
+Introduction to Artificial Intelligence and Machine Learning,201AM3T01,3,3,Artificial Intelligence & Machine Learning
+Computer Organization,201AM3T02,3,3,Artificial Intelligence & Machine Learning
+Operating Systems,201CS3T03,3,3,Artificial Intelligence & Machine Learning
+Java Programming,201AM3T03,3,3,Artificial Intelligence & Machine Learning
+Discrete Mathematics,201BS3T13,3,3,Artificial Intelligence & Machine Learning
+Java Programming Lab,201AM3L01,1.5,3,Artificial Intelligence & Machine Learning
+Operating Systems Lab,201CS3L02,1.5,3,Artificial Intelligence & Machine Learning
+Introduction to Artificial Intelligence and Machine Learning Lab,201AM3L02,1.5,3,Artificial Intelligence & Machine Learning
+Skill Oriented Course-I: Natural Language Processing with Python Lab,201AM3P01,2,3,Artificial Intelligence & Machine Learning
+Community Service Project,201AM3P02,4,3,Artificial Intelligence & Machine Learning
+Biology for Engineers,201MC3T03,0,3,Artificial Intelligence & Machine Learning
+Probability and Statistics,201BS4T16,3,4,Artificial Intelligence & Machine Learning
+Formal Languages and Automata Theory,201CS4T05,3,4,Artificial Intelligence & Machine Learning
+Database Management Systems,201CS4T06,3,4,Artificial Intelligence & Machine Learning
+Integral Transforms  Vector Calculus and PDE,201BS4T19,3,4,Artificial Intelligence & Machine Learning
+Managerial Economics and Financial Analysis,201HS4T03,3,4,Artificial Intelligence & Machine Learning
+Database Management Systems Lab,201CS4L04,1.5,4,Artificial Intelligence & Machine Learning
+Web Application Development Lab,201AM4L01,1.5,4,Artificial Intelligence & Machine Learning
+R Programming Lab,201CS4L06,1.5,4,Artificial Intelligence & Machine Learning
+Skill Oriented Course-II: Mobile Application Development Lab,201AM4S01,2,4,Artificial Intelligence & Machine Learning
+Essence of Indian Traditional Knowledge,201MC4T04,0,4,Artificial Intelligence & Machine Learning
+Computer Networks,201CS5T01,3,5,Artificial Intelligence & Machine Learning
+Machine Learning,201AM5T01,3,5,Artificial Intelligence & Machine Learning
+Data Warehousing and Data Mining,201CS5T03,3,5,Artificial Intelligence & Machine Learning
+Professional Elective -I,201PE5T01,3,5,Artificial Intelligence & Machine Learning
+Open Elective – I (Mean Stack Technologies),201CS5J01,3,5,Artificial Intelligence & Machine Learning
+Computer Networks & Data Mining and Warehousing Lab,201AM5L01,1.5,5,Artificial Intelligence & Machine Learning
+Machine Learning using Python Lab,201AM5L02,1.5,5,Artificial Intelligence & Machine Learning
+Summer Internship - I,201AM5P01,1.5,5,Artificial Intelligence & Machine Learning
+Skill Oriented Course – III: Robotic Process Automation,201CS5S01,2,5,Artificial Intelligence & Machine Learning
+IPR & Patents,201MC5T01,0,5,Artificial Intelligence & Machine Learning
+Deep Learning,201AM6T01,3,6,Artificial Intelligence & Machine Learning
+Compiler Design,201CS6T02,3,6,Artificial Intelligence & Machine Learning
+Design and Analysis of Algorithms,201AM6T02,3,6,Artificial Intelligence & Machine Learning
+Professional Elective II,201PE5T02,3,6,Artificial Intelligence & Machine Learning
+Open Elective – II,201CS6J01,3,6,Artificial Intelligence & Machine Learning
+Algorithms for Efficient Coding Lab,201AM6L01,1.5,6,Artificial Intelligence & Machine Learning
+Compiler Design & Object-Oriented Analysis and Design Lab,201CS6L02,1.5,6,Artificial Intelligence & Machine Learning
+Deep Learning with TensorFlow and PyTorch Lab,201AM6L02,1.5,6,Artificial Intelligence & Machine Learning
+Skill Oriented Course – IV: Big Data Spark,201CS6S01,2,6,Artificial Intelligence & Machine Learning
+Employability Skills,201MC6T02,0,6,Artificial Intelligence & Machine Learning
+Professional Ethics and Human Values,201MC6T01,0,6,Artificial Intelligence & Machine Learning

@@ -1,0 +1,48 @@
+name,code,credits,semester,department
+Communicative English,201HS1T01,3,1,AIML
+Differential Equations and Linear Algebra,201BS1T01,3,1,AIML
+Engineering Chemistry,201BS1T02,3,1,AIML
+Programming for Problem Solving using C,201CS1T01,3,1,AIML
+Engineering Drawing,201ME1T01,3,1,AIML
+Engineering Chemistry Lab,201BS1L01,1.5,1,AIML
+Programming for Problem Solving using C Lab,201CS1L01,1.5,1,AIML
+Engineering Workshop,201ME1L01,1.5,1,AIML
+Advanced Calculus,202BS1T01,3,2,AIML
+Applied Physics,202BS1T02,3,2,AIML
+Data Structures,202CS1T01,3,2,AIML
+Python Programming,202CS1T02,3,2,AIML
+Environmental Science,202MC1T01,0,2,AIML
+Applied Physics Lab,202BS1L01,1.5,2,AIML
+Data Structures Lab,202CS1L01,1.5,2,AIML
+Python Programming Lab,202CS1L02,1.5,2,AIML
+Probability and Statistics,203BS1T01,3,3,AIML
+Database Management Systems,203CS1T01,3,3,AIML
+Object Oriented Programming through Java,203CS1T02,3,3,AIML
+Computer Organization,203CS1T03,3,3,AIML
+Fundamentals of AI & ML,203AI1T01,3,3,AIML
+Database Management Systems Lab,203CS1L01,1.5,3,AIML
+Object Oriented Programming through Java Lab,203CS1L02,1.5,3,AIML
+AI & ML Lab,203AI1L01,1.5,3,AIML
+Mathematical Foundations for ML,204AI1T01,3,4,AIML
+Operating Systems,204CS1T01,3,4,AIML
+Design and Analysis of Algorithms,204CS1T02,3,4,AIML
+Software Engineering,204CS1T03,3,4,AIML
+Computer Networks,204CS1T04,3,4,AIML
+Operating Systems Lab,204CS1L01,1.5,4,AIML
+Design and Analysis of Algorithms Lab,204CS1L02,1.5,4,AIML
+Machine Learning,205AI1T01,3,5,AIML
+Deep Learning,205AI1T02,3,5,AIML
+Big Data Analytics,205AI1T03,3,5,AIML
+Web Technologies,205CS1T01,3,5,AIML
+Professional Elective - I,205XX1T01,3,5,AIML
+Machine Learning Lab,205AI1L01,1.5,5,AIML
+Deep Learning Lab,205AI1L02,1.5,5,AIML
+Web Technologies Lab,205CS1L01,1.5,5,AIML
+Natural Language Processing,206AI1T01,3,6,AIML
+Computer Vision,206AI1T02,3,6,AIML
+Professional Elective - II,206XX1T01,3,6,AIML
+Professional Elective - III,206XX1T02,3,6,AIML
+Open Elective - I,206XX1T03,3,6,AIML
+Natural Language Processing Lab,206AI1L01,1.5,6,AIML
+Computer Vision Lab,206AI1L02,1.5,6,AIML
+Mini Project,206AI1P01,2,6,AIML

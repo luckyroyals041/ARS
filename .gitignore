@@ -155,3 +155,12 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/ 
+# Ignore node_modules
+node_modules/
+
+# Ignore Python virtual environments
+venv/
+.env/
+
+# Ignore SQL database files
+*.sql

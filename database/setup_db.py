@@ -2,9 +2,9 @@ import mysql.connector
 
 # Connect to MySQL Server
 connection = mysql.connector.connect(
-    host="localhost",    # Change if MySQL is on a different server
-    user="root",         # Replace with your MySQL username
-    password="147359"    # Replace with your MySQL password
+    host="localhost",
+    user="lucky",
+    password="#Db@1234"
 )
 
 cursor = connection.cursor()
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Students (
     registered_no VARCHAR(20) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     branch VARCHAR(50) NOT NULL,
-    curr_semester INT NOT NULL,  -- Current Semester Number
+    curr_semester INT NOT NULL,
     father_name VARCHAR(100) NOT NULL,
     door_no VARCHAR(50) NOT NULL,
     city VARCHAR(50) NOT NULL,
@@ -28,17 +28,17 @@ CREATE TABLE IF NOT EXISTS Students (
     state VARCHAR(50) NOT NULL,
     country VARCHAR(50) NOT NULL,
     pincode VARCHAR(10) NOT NULL,
-    cgpa DECIMAL(4,2) DEFAULT 0  -- Dynamically updated CGPA
+    cgpa DECIMAL(4,2) DEFAULT 0
 );
 """)
 
-# Create Semester Records Table (One entry per subject per semester)
+# Create Semester Records Table
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS SemesterRecords (
     id INT AUTO_INCREMENT PRIMARY KEY,
     registered_no VARCHAR(20) NOT NULL,
-    semester_no INT NOT NULL,  -- Indicates the completed semester (1st, 2nd, etc.)
-    month_year VARCHAR(10) NOT NULL,  -- Format: MM-YYYY
+    semester_no INT NOT NULL,
+    month_year VARCHAR(10) NOT NULL,
     course_name VARCHAR(100) NOT NULL,
     grade VARCHAR(2),
     credits DECIMAL(2,1),
@@ -49,22 +49,23 @@ CREATE TABLE IF NOT EXISTS SemesterRecords (
 );
 """)
 
-# Create Semester Summary Table (One entry per semester per student)
+# Create Semester Summary Table
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS SemesterSummary (
-id INT AUTO_INCREMENT PRIMARY KEY,
-registered_no VARCHAR(20) NOT NULL,
-semester_no INT NOT NULL,  -- Completed semester (2nd semester, 3rd semester, etc.)
-total_no_of_subjects INT NOT NULL,
-sgpa DECIMAL(4,2) NOT NULL,  -- Semester-wise GPA
-no_of_failed_subjects INT NOT NULL,
-FOREIGN KEY (registered_no) REFERENCES Students(registered_no) ON DELETE CASCADE,
-UNIQUE KEY unique_semester (registered_no, semester_no)  -- Ensures one row per student per semester
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    registered_no VARCHAR(20) NOT NULL,
+    semester_no INT NOT NULL,
+    total_no_of_subjects INT NOT NULL,
+    sgpa DECIMAL(4,2) NOT NULL,
+    no_of_failed_subjects INT NOT NULL,
+    FOREIGN KEY (registered_no) REFERENCES Students(registered_no) ON DELETE CASCADE,
+    UNIQUE KEY unique_semester (registered_no, semester_no)
 );
 """)
 
-# Create Trigger to Automatically Update CGPA
-cursor.execute("""
+# Triggers (run separately since Python connector doesn't support DELIMITER)
+print("\n⚠️ Please run the following SQL statements manually in the MySQL shell:\n")
+print("""
 DELIMITER //
 CREATE TRIGGER update_cgpa_after_semester_update
 AFTER INSERT ON SemesterRecords
@@ -77,14 +78,7 @@ BEGIN
         WHERE sr.registered_no = s.registered_no
     )
     WHERE s.registered_no = NEW.registered_no;
-END;
-//
-DELIMITER ;
-""")
-
-# Create Trigger to Automatically Insert or Update Semester Summary
-cursor.execute("""
-DELIMITER //
+END;//
 
 CREATE TRIGGER update_semester_summary_after_insert
 AFTER INSERT ON SemesterRecords
@@ -102,13 +96,11 @@ BEGIN
         total_no_of_subjects = VALUES(total_no_of_subjects),
         sgpa = VALUES(sgpa),
         no_of_failed_subjects = VALUES(no_of_failed_subjects);
-END;
-
-//
+END;//
 DELIMITER ;
 """)
-print("✅ Database and triggers created successfully!")
 
 # Close the connection
 cursor.close()
 connection.close()
+print("✅ Tables created successfully. Don't forget to run the triggers in MySQL shell!")
